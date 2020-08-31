@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+
+<head>
+  <title>آموزش استفاده از گواهی LetsEncrypt SSL در ایمیل سرور Zimbra – رسول صفری – وبلاگی برای انتشار حرف هایم!</title>
+
+      <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+     
+    
+    <meta name="description" content="
+سلام، امروز میخواهیم با همدیگه در ایمیل سرور Zimbra یک گواهی SSL از نوع LetsEncrypt نصب کنیم، کار خیلی آسونی هست بریم که انجامش بدیم.
+
+" />
+    <meta property="og:description" content="
+سلام، امروز میخواهیم با همدیگه در ایمیل سرور Zimbra یک گواهی SSL از نوع LetsEncrypt نصب کنیم، کار خیلی آسونی هست بریم که انجامش بدیم.
+
+" />
+    <meta name="twitter:description" content="
+سلام، امروز میخواهیم با همدیگه در ایمیل سرور Zimbra یک گواهی SSL از نوع LetsEncrypt نصب کنیم، کار خیلی آسونی هست بریم که انجامش بدیم.
+
+" />
+    
+    <meta property="author" content="رسول صفری" />
+    
+    <meta name="keywords" content="SSL,LetsEncrypt,Zimbra,Email,Server," />
+    
+    
+    <meta property="og:title" content="آموزش استفاده از گواهی LetsEncrypt SSL در ایمیل سرور Zimbra" />
+    <meta name="twitter:title" content="آموزش استفاده از گواهی LetsEncrypt SSL در ایمیل سرور Zimbra" />
+    
+    
+    <meta property="og:image" content="https://rasooll.com/images/post/zimbra-letsencrypt1.png" />
+    <meta name="twitter:image" content="https://rasooll.com/images/post/zimbra-letsencrypt1.png" />
+    <meta name="twitter:image:alt" content="آموزش استفاده از گواهی LetsEncrypt SSL در ایمیل سرور Zimbra">
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:site" content="@rasooll_">
+    <meta name="twitter:creator" content="@rasooll_">
+    <meta property="og:url" content="https://rasooll.com/install-letsencrypt-in-zimbra/">
+    <meta property="og:locale" content="fa">
+    <link rel="author" href="https://rasooll.com">
+    <link rel="shortcut icon" href="https://rasooll.com/images/favicon.png" type="image/png" sizes="150x150"> 
+
+
+  <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="alternate" type="application/rss+xml" title="رسول صفری - وبلاگی برای انتشار حرف هایم!" href="/feed.xml" />
+  <link rel="manifest" href="/manifest.json">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <header class="siteinfo">
+          <a href="/">
+            <img src="https://secure.gravatar.com/avatar/789598edd4440e0a5e0d8e37f4ae5de7?s=140&d=mm&r=g" alt="آواتار رسول صفری" class="rounded avatar" />
+          </a>
+          <a href="/" class="sitename">
+            <h1>رسول صفری</h1>
+          </a>
+          <p class="sitedescription">وبلاگی برای انتشار حرف هایم!</p>
+        </header>
+      </div>
+      <div class="col-md-5">
+        <nav class="font-titr topbar">
+          <div class="vertical-middle">
+            <a href="/archive">آرشیو</a>
+            <a href="/about">درباره‌ی من</a>
+            <a href="/contact">تماس با من</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="hrbtm"> </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <article class="post">
+  <h1>آموزش استفاده از گواهی LetsEncrypt SSL در ایمیل سرور Zimbra</h1>
+
+  <div class="content">
+    <p align="center"><img src="/images/post/zimbra-letsencrypt1.png" alt="zimbra-letsencrypt1" /></p>
+<p>سلام، امروز میخواهیم با همدیگه در ایمیل سرور Zimbra یک گواهی SSL از نوع LetsEncrypt نصب کنیم، کار خیلی آسونی هست بریم که انجامش بدیم.</p>
+
+<blockquote>
+  <p><strong>نکته:</strong> در Zimbra Server نسخه ۸.۷ و بالاتر برخی دستورات با کاربر zimbra انجام می‌شود، اما در نسخه ۸.۶ و پایین‌تر تمامی این دستورات باید با کاربر root انجام شوند.</p>
+</blockquote>
+
+<p>ابتدا باید سرویس <code class="highlighter-rouge">zimbraproxy</code> و <code class="highlighter-rouge">mailboxd</code> رو متوقف کنیم:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ zmproxyctl stop
+$ zmmailboxdctl stop
+</code></pre>
+</div>
+
+<p>حال نیاز است تا پروژه LetsEncrypt رو داشته باشیم(البته می‌توانید از بسته Certbot نیز با توجه با سیستم عامل یا توزیع خود استفاده کنید).</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ git clone https://github.com/letsencrypt/letsencrypt
+$ cd letsencrypt
+</code></pre>
+</div>
+
+<p>الان با استفاده از دستور زیر می‌توانیم برای دامنه مورد نظر خودمون درخواست گواهی SSL بدهیم:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># ./letsencrypt-auto certonly --standalone -d xmpp.example.com
+</code></pre>
+</div>
+
+<p>چون سرویس <code class="highlighter-rouge">zimbraproxy</code> متوقف شده است یک وب سرور standalone میتواند روی پورت ۸۰ شروع به کار کند برای تایید هویت دامنه شما.</p>
+
+<p>با دیدن خروجی مانند زیر یعنی گواهی SSL شما صادر شده است:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at
+   /etc/letsencrypt/live/zimbra86.zimbra.io/fullchain.pem. Your cert
+   will expire on 2016-03-04. To obtain a new version of the
+   certificate in the future, simply run Let's Encrypt again.
+ - If like Let's Encrypt, please consider supporting our work by:
+
+   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
+</code></pre>
+</div>
+
+<p>فایل های SSL کجا قرار دارند؟ در مسیر زیر</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/etc/letsencrypt/live/domainname
+</code></pre>
+</div>
+
+<ul>
+  <li>که در اینجا domainname همان نام دامنه شماست.</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>root@zimbra86:/etc/letsencrypt/live/zimbra86.zimbra.io# ls -al
+total 8
+drwxr-xr-x 2 root root 4096 Dec  5 16:46 .
+drwx------ 3 root root 4096 Dec  5 16:46 ..
+lrwxrwxrwx 1 root root   42 Dec  5 16:46 cert.pem -&gt; ../../archive/zimbra86.zimbra.io/cert1.pem
+lrwxrwxrwx 1 root root   43 Dec  5 16:46 chain.pem -&gt; ../../archive/zimbra86.zimbra.io/chain1.pem
+lrwxrwxrwx 1 root root   47 Dec  5 16:46 fullchain.pem -&gt; ../../archive/zimbra86.zimbra.io/fullchain1.pem
+lrwxrwxrwx 1 root root   45 Dec  5 16:46 privkey.pem -&gt; ../../archive/zimbra86.zimbra.io/privkey1.pem
+</code></pre>
+</div>
+
+<p>حال شما علاوه بر Intermediate CA نیاز به Root CA نیز دارید که میتوانید آن را از <a href="https://www.identrust.com/certificates/trustid/root-download-x3.html">این لینک</a> دریافت نمایید.</p>
+
+<p>فایل chain.pem را با یک ویرایشگر متن باز کرده و یک نمونه از Root CA مانند زیر به انتهای فایل خود اضافه کنید.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-----BEGIN CERTIFICATE-----
+YOURCHAIN
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIIDSjCCAjKgAwIBAgIQRK+wgNajJ7qJMDmGLvhAazANBgkqhkiG9w0BAQUFADA/
+MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT
+DkRTVCBSb290IENBIFgzMB4XDTAwMDkzMDIxMTIxOVoXDTIxMDkzMDE0MDExNVow
+PzEkMCIGA1UEChMbRGlnaXRhbCBTaWduYXR1cmUgVHJ1c3QgQ28uMRcwFQYDVQQD
+Ew5EU1QgUm9vdCBDQSBYMzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AN+v6ZdQCINXtMxiZfaQguzH0yxrMMpb7NnDfcdAwRgUi+DoM3ZJKuM/IUmTrE4O
+rz5Iy2Xu/NMhD2XSKtkyj4zl93ewEnu1lcCJo6m67XMuegwGMoOifooUMM0RoOEq
+OLl5CjH9UL2AZd+3UWODyOKIYepLYYHsUmu5ouJLGiifSKOeDNoJjj4XLh7dIN9b
+xiqKqy69cK3FCxolkHRyxXtqqzTWMIn/5WgTe1QLyNau7Fqckh49ZLOMxt+/yUFw
+7BZy1SbsOFU5Q9D8/RhcQPGX69Wam40dutolucbY38EVAjqr2m7xPi71XAicPNaD
+aeQQmxkqtilX4+U9m5/wAl0CAwEAAaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNV
+HQ8BAf8EBAMCAQYwHQYDVR0OBBYEFMSnsaR7LHH62+FLkHX/xBVghYkQMA0GCSqG
+SIb3DQEBBQUAA4IBAQCjGiybFwBcqR7uKGY3Or+Dxz9LwwmglSBd49lZRNI+DT69
+ikugdB/OEIKcdBodfpga3csTS7MgROSR6cz8faXbauX+5v3gTt23ADq1cEmv8uXr
+AvHRAosZy5Q6XkjEGB5YGV8eAlrwDPGxrancWYaLbumR9YbK+rlmM6pZW87ipxZz
+R8srzJmwN0jP41ZL9c8PDHIyh8bwRLtTcm1D9SZImlJnt1ir/md2cXjbDaJWFBM5
+JDGFoqgCWjBH4d1QB7wCCZAA62RjYJsWvIjJEubSfZGL+T0yjWW06XyxV3bqxbYo
+Ob8VZRzI9neWagqNdwvYkQsEjgfbKbYK7p2CNTUQ
+-----END CERTIFICATE-----
+</code></pre>
+</div>
+
+<p>حال با استفاده از دستورات زیر گواهی SSL خود را به محل نصب Zimbra منتقل می‌کنیم:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>root@mail2:~# mkdir /opt/zimbra/ssl/letsencrypt
+root@mail2:~# cp /etc/letsencrypt/live/mail2.next.zimbra.io/* /opt/zimbra/ssl/letsencrypt/
+root@mail2:~# chown zimbra:zimbra /opt/zimbra/ssl/letsencrypt/*
+root@mail2:~# ls -la /opt/zimbra/ssl/letsencrypt/
+total 24
+drwxr-xr-x 2 root   root   4096 Jul 15 22:59 .
+drwxr-xr-x 8 zimbra zimbra 4096 Jul 15 22:59 ..
+-rw-r--r-- 1 zimbra zimbra 1809 Jul 15 22:59 cert.pem
+-rw-r--r-- 1 zimbra zimbra 2847 Jul 15 22:59 chain.pem
+-rw-r--r-- 1 zimbra zimbra 3456 Jul 15 22:59 fullchain.pem
+-rw-r--r-- 1 zimbra zimbra 1704 Jul 15 22:59 privkey.pem
+</code></pre>
+</div>
+
+<ul>
+  <li>توجه داشته باید نام دامنه خود را جایگزین کنید.</li>
+</ul>
+
+<p>حال باید اعتبار گواهی SSL خود را بررسی کنید:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>zimbra@zimbra87:/opt/zimbra/ssl/letsencrypt/$ /opt/zimbra/bin/zmcertmgr verifycrt comm privkey.pem cert.pem chain.pem 
+** Verifying cert.pem against privkey.pem
+Certificate (cert.pem) and private key (privkey.pem) match.
+Valid Certificate: cert.pem: OK
+</code></pre>
+</div>
+
+<p>حال بهتر است که از گواهی های موجود در سرور بکاپ بگیریم، به هر حال بکاپ هیچوقت ضرر نداره.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cp -a /opt/zimbra/ssl/zimbra /opt/zimbra/ssl/zimbra.$(date "+%Y%m%d")
+</code></pre>
+</div>
+
+<p>حال باید Private key مربوط به SSL خودمون رو کپی کنیم:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cp /opt/zimbra/ssl/letsencrypt/privkey.pem /opt/zimbra/ssl/zimbra/commercial/commercial.key
+</code></pre>
+</div>
+
+<p>الان می‌تونیم Deploy نهایی رو انجام بدیم:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>zimbra@mail2://opt/zimbra/ssl/letsencrypt/$ /opt/zimbra/bin/zmcertmgr deploycrt comm cert.pem chain.pem 
+** Verifying 'cert.pem' against '/opt/zimbra/ssl/zimbra/commercial/commercial.key'
+Certificate 'cert.pem' and private key '/opt/zimbra/ssl/zimbra/commercial/commercial.key' match.
+** Verifying 'cert.pem' against 'chain.pem'
+Valid certificate chain: cert.pem: OK
+** Copying 'cert.pem' to '/opt/zimbra/ssl/zimbra/commercial/commercial.crt'
+** Copying 'chain.pem' to '/opt/zimbra/ssl/zimbra/commercial/commercial_ca.crt'
+** Appending ca chain 'chain.pem' to '/opt/zimbra/ssl/zimbra/commercial/commercial.crt'
+** Importing cert '/opt/zimbra/ssl/zimbra/commercial/commercial_ca.crt' as 'zcs-user-commercial_ca' into cacerts '/opt/zimbra/common/lib/jvm/java/jre/lib/security/cacerts'
+** NOTE: restart mailboxd to use the imported certificate.
+** Saving config key 'zimbraSSLCertificate' via zmprov modifyServer mail2.next.zimbra.io...failed (rc=1)
+** Installing ldap certificate '/opt/zimbra/conf/slapd.crt' and key '/opt/zimbra/conf/slapd.key'
+** Copying '/opt/zimbra/ssl/zimbra/commercial/commercial.crt' to '/opt/zimbra/conf/slapd.crt'
+** Copying '/opt/zimbra/ssl/zimbra/commercial/commercial.key' to '/opt/zimbra/conf/slapd.key'
+** Creating file '/opt/zimbra/ssl/zimbra/jetty.pkcs12'
+** Creating keystore '/opt/zimbra/mailboxd/etc/keystore'
+** Installing mta certificate '/opt/zimbra/conf/smtpd.crt' and key '/opt/zimbra/conf/smtpd.key'
+** Copying '/opt/zimbra/ssl/zimbra/commercial/commercial.crt' to '/opt/zimbra/conf/smtpd.crt'
+** Copying '/opt/zimbra/ssl/zimbra/commercial/commercial.key' to '/opt/zimbra/conf/smtpd.key'
+** Installing proxy certificate '/opt/zimbra/conf/nginx.crt' and key '/opt/zimbra/conf/nginx.key'
+** Copying '/opt/zimbra/ssl/zimbra/commercial/commercial.crt' to '/opt/zimbra/conf/nginx.crt'
+** Copying '/opt/zimbra/ssl/zimbra/commercial/commercial.key' to '/opt/zimbra/conf/nginx.key'
+** NOTE: restart services to use the new certificates.
+** Cleaning up 3 files from '/opt/zimbra/conf/ca'
+** Removing /opt/zimbra/conf/ca/41b01cbb.0
+** Removing /opt/zimbra/conf/ca/ca.key
+** Removing /opt/zimbra/conf/ca/ca.pem
+** Copying CA to /opt/zimbra/conf/ca
+** Copying '/opt/zimbra/ssl/zimbra/ca/ca.key' to '/opt/zimbra/conf/ca/ca.key'
+** Copying '/opt/zimbra/ssl/zimbra/ca/ca.pem' to '/opt/zimbra/conf/ca/ca.pem'
+** Creating CA hash symlink '41b01cbb.0' -&gt; 'ca.pem'
+** Creating /opt/zimbra/conf/ca/commercial_ca_1.crt
+** Creating CA hash symlink '4f06f81d.0' -&gt; 'commercial_ca_1.crt'
+** Creating /opt/zimbra/conf/ca/commercial_ca_2.crt
+** Creating CA hash symlink '2e5ac55d.0' -&gt; 'commercial_ca_2.crt'
+</code></pre>
+</div>
+
+<p>حال یکبار لازم است تا سرور Zimbra راه اندازی مجدد گردد:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>zmcontrol restart
+</code></pre>
+</div>
+
+<p>کار تمام شد الان میتوانیم آدرس ایمیل سرور خودمون رو باز کنیم و صفحه زیر را ببینیم</p>
+
+<p><img src="/images/post/zimbra-letsencrypt3.png" alt="Zimbra login" title="Zimbra login" /></p>
+
+<p>گواهی SSL ما نیز به صورت زیر است:</p>
+
+<p><img src="/images/post/zimbra-letsencrypt2.png" alt="Zimbra" title="Zimbra" /></p>
+
+<p>کار تمام شد</p>
+
+  </div>
+
+  <div class="date">
+    نوشته شده در سه‌شنبه 19 شهریور 1398
+  </div>
+  <div class="paginate">
+    <div class="row">
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/monitoring-system-alertmanager/" title="آموزش کانفیگ سیستم مانیتورینگ - Alertmanager">
+          <div class=" post-pg-btn post-previous">
+            <i class="fa fa-arrow-right pull-right" aria-hidden="true"></i> آموزش کانفیگ سیستم مانیتورینگ - Alertmanager
+          </div>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/how-to-use-ceph-rbd-in-k8s/" title="آموزش استفاده از Ceph RBD در کوبرنتیز">
+          <div class=" post-pg-btn post-next">
+              <i class="fa fa-arrow-left pull-left" aria-hidden="true"></i> آموزش استفاده از Ceph RBD در کوبرنتیز
+          </div>
+        </a>
+      
+    </div>
+  </div>
+  </div>
+  <br />
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'https-rasooll-com';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+      </div>
+    </div>
+  </div>
+
+
+  <footer class="footer">
+    <div class="social-icon">
+    <a href="mailto:safari@rasooll.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+
+
+    <a href="https://github.com/rasooll"><i class="fa fa-github" aria-hidden="true"></i></a>
+
+
+
+    <a href="https://www.linkedin.com/in/rasoolsf"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+
+
+    <a href="https://www.twitter.com/rasooll_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+
+    <a href="/feed.xml"><i class="fa fa-rss" aria-hidden="true"></i></a></div>
+    <div class="footer-text">
+      <i class="fa fa-heart heart-color"></i>
+    </div>
+  </footer>
+
+
+
+  
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+    crossorigin="anonymous"></script>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try { clicky.init(101072468); } catch (e) { }</script>
+  <noscript>
+    <p>
+      <img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101072468ns.gif" />
+    </p>
+  </noscript>
+</body>
+
+</html>

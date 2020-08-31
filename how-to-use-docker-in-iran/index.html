@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+
+<head>
+  <title>عبور از تحریم‌های داکر روی گنو/لینوکس – رسول صفری – وبلاگی برای انتشار حرف هایم!</title>
+
+      <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+     
+    
+    <meta name="description" content="دیروز داخل وبلاگم پستی نوشتم درباره‌ی نصب وردپرس توسط داکر ، یکی از مشکلاتی که ما ایرانی ها برای استفاده از داکر داریم این هست که ما تحریم هستیم و داکر سرویس‌های خودش را در اختیار ما قرار نمیده خوب این مشکل با هر نوع روش تغییر آیپی باید حل بشه اما روی گنو لینوکس برای عبور..." />
+    <meta property="og:description" content="دیروز داخل وبلاگم پستی نوشتم درباره‌ی نصب وردپرس توسط داکر ، یکی از مشکلاتی که ما ایرانی ها برای استفاده از داکر داریم این هست که ما تحریم هستیم و داکر سرویس‌های خودش را در اختیار ما قرار نمیده خوب این مشکل با هر نوع روش تغییر آیپی باید حل بشه اما روی گنو لینوکس برای عبور..." />
+    <meta name="twitter:description" content="دیروز داخل وبلاگم پستی نوشتم درباره‌ی نصب وردپرس توسط داکر ، یکی از مشکلاتی که ما ایرانی ها برای استفاده از داکر داریم این هست که ما تحریم هستیم و داکر سرویس‌های خودش را در اختیار ما قرار نمیده خوب این مشکل با هر نوع روش تغییر آیپی باید حل بشه اما روی گنو لینوکس برای عبور..." />
+    
+    <meta property="author" content="رسول صفری" />
+    
+    <meta name="keywords" content="docker,wordpress,container,filter,privoxy,proxychains,socks,wp,dockerhub,داکر,وردپرس,داکرهاب,کانتینر," />
+    
+    
+    <meta property="og:title" content="عبور از تحریم‌های داکر روی گنو/لینوکس" />
+    <meta name="twitter:title" content="عبور از تحریم‌های داکر روی گنو/لینوکس" />
+    
+    
+    <meta name="twitter:site" content="@rasooll_">
+    <meta name="twitter:creator" content="@rasooll_">
+    <meta property="og:url" content="https://rasooll.com/how-to-use-docker-in-iran/">
+    <meta property="og:locale" content="fa">
+    <link rel="author" href="https://rasooll.com">
+    <link rel="shortcut icon" href="https://rasooll.com/images/favicon.png" type="image/png" sizes="150x150"> 
+
+
+  <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="alternate" type="application/rss+xml" title="رسول صفری - وبلاگی برای انتشار حرف هایم!" href="/feed.xml" />
+  <link rel="manifest" href="/manifest.json">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <header class="siteinfo">
+          <a href="/">
+            <img src="https://secure.gravatar.com/avatar/789598edd4440e0a5e0d8e37f4ae5de7?s=140&d=mm&r=g" alt="آواتار رسول صفری" class="rounded avatar" />
+          </a>
+          <a href="/" class="sitename">
+            <h1>رسول صفری</h1>
+          </a>
+          <p class="sitedescription">وبلاگی برای انتشار حرف هایم!</p>
+        </header>
+      </div>
+      <div class="col-md-5">
+        <nav class="font-titr topbar">
+          <div class="vertical-middle">
+            <a href="/archive">آرشیو</a>
+            <a href="/about">درباره‌ی من</a>
+            <a href="/contact">تماس با من</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="hrbtm"> </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <article class="post">
+  <h1>عبور از تحریم‌های داکر روی گنو/لینوکس</h1>
+
+  <div class="content">
+    <p>دیروز داخل وبلاگم پستی نوشتم درباره‌ی نصب وردپرس توسط داکر ، یکی از مشکلاتی که ما ایرانی ها برای استفاده از داکر داریم این هست که ما تحریم هستیم و داکر سرویس‌های خودش را در اختیار ما قرار نمیده خوب این مشکل با هر نوع روش تغییر آیپی باید حل بشه اما روی گنو لینوکس برای عبور داکر از پروکسی باید از ابزار proxychains استفاده کرد اما داکر این ابزار را دور میزنه و ارتباط مستقیم روی سرور خودش ایجاد میکنه درنتیجه تحریم ها دور زده نمیشه و باقیست!</p>
+<blockquote class="ltr">403 Forbidden<br />
+Since Docker is a US company, we must comply with US export control regulations. In an effort to comply with these, we now block all IP addresses that are located in Cuba, Iran, North Korea, Republic of Crimea, Sudan, and Syria. If you are not in one of these cities, countries, or regions and are blocked, please reach out to https://support.docker.com </blockquote>
+<p>خوب دیگه الان وقتشه تحریم ها را دور بزنیم !</p>
+
+<p>داکر این امکان را داره که پروکسی http و https برای اتصال به سرور استفاده کنیم اما اگر پروکسی ما ساکس بود باید چه کاری انجام داد ؟</p>
+
+<p>راه حل privoxy هست با استفاده از دستور زیر روی اوبونتو آنرا نصب میکنیم:</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo apt install privoxy
+</code></pre>
+</div>
+<p>حال باید تنظیمات زیر را داخل فایل تنظیمات وارد کنیم:</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>/etc/privoxy/config  <span class="c"># آدرس فایل تنظیمات</span>
+
+forward-socks5t   /               127.0.0.1:1080 .
+forward         192.168.<span class="k">*</span>.<span class="k">*</span>/     .
+forward            10.<span class="k">*</span>.<span class="k">*</span>.<span class="k">*</span>/     .
+forward           127.<span class="k">*</span>.<span class="k">*</span>.<span class="k">*</span>/     .
+forward           localhost/     .
+</code></pre>
+</div>
+<ul>
+  <li>در اینجا آدرس ساکس پروکسی شما روی لوکال هاست و پورت ۱۰۸۰ بوده است.</li>
+</ul>
+
+<p>حال باید سرویس privoxy را راه اندازی مجدد کنیم.</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo systemctl restart privoxy
+</code></pre>
+</div>
+<p>الان ما یک سرویس http پروکسی داریم که روی لوکال هاست و پورت ۸۱۱۸ تنظیم شده است.</p>
+
+<p>حالا باید این پروکسی را روی داکر تنظیم کنیم.<br />
+برای اینکار ابتدا باید شاخه زیر را ایجاد کنیم :</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo mkdir -p /etc/systemd/system/docker.service.d
+</code></pre>
+</div>
+<p>حال فایل ‍<code class="highlighter-rouge">http-proxy.conf</code> را در شاخه‌ای که ساخته‌ایم ایجاد کرده و تنظیمات زیر را داخلش قرار می‌دهیم:</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>Service]
+<span class="nv">Environment</span><span class="o">=</span><span class="s2">"HTTP_PROXY=http://localhost:8118/"</span>
+</code></pre>
+</div>
+<p>حالا دستورات زیر را به ترتیب وارد می‌کنیم:</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo systemctl daemon-reload
+<span class="gp">$ </span>sudo systemctl restart docker
+</code></pre>
+</div>
+<p>کار به اتمام رسید ولی با دستور زیر میتوانیم تنظیمات را چک کنیم:</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>systemctl show --property<span class="o">=</span>Environment docker
+<span class="nv">Environment</span><span class="o">=</span><span class="nv">HTTP_PROXY</span><span class="o">=</span>http://localhost:8118/
+</code></pre>
+</div>
+<p>اگر خروجی به صورت بالا بود تنظیمات به درستی انجام شده و اکنون شما تحریم های داکر را دور زده‌اید و میتوانید از بسته‌های Docker Hub استفاده کنید.</p>
+
+  </div>
+
+  <div class="date">
+    نوشته شده در پنج‌شنبه 05 بهمن 1396
+  </div>
+  <div class="paginate">
+    <div class="row">
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/how-to-install-wordpress-via-docker/" title="آموزش نصب وردپرس توسط داکر">
+          <div class=" post-pg-btn post-previous">
+            <i class="fa fa-arrow-right pull-right" aria-hidden="true"></i> آموزش نصب وردپرس توسط داکر
+          </div>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/how-to-enable-auth-for-mongodb/" title="آموزش فعالسازی احراز هویت برای MongoDB">
+          <div class=" post-pg-btn post-next">
+              <i class="fa fa-arrow-left pull-left" aria-hidden="true"></i> آموزش فعالسازی احراز هویت برای MongoDB
+          </div>
+        </a>
+      
+    </div>
+  </div>
+  </div>
+  <br />
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'https-rasooll-com';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+      </div>
+    </div>
+  </div>
+
+
+  <footer class="footer">
+    <div class="social-icon">
+    <a href="mailto:safari@rasooll.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+
+
+    <a href="https://github.com/rasooll"><i class="fa fa-github" aria-hidden="true"></i></a>
+
+
+
+    <a href="https://www.linkedin.com/in/rasoolsf"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+
+
+    <a href="https://www.twitter.com/rasooll_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+
+    <a href="/feed.xml"><i class="fa fa-rss" aria-hidden="true"></i></a></div>
+    <div class="footer-text">
+      <i class="fa fa-heart heart-color"></i>
+    </div>
+  </footer>
+
+
+
+  
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+    crossorigin="anonymous"></script>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try { clicky.init(101072468); } catch (e) { }</script>
+  <noscript>
+    <p>
+      <img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101072468ns.gif" />
+    </p>
+  </noscript>
+</body>
+
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+
+<head>
+  <title>آموزش کانفیگ سیستم مانیتورینگ - Nginx – رسول صفری – وبلاگی برای انتشار حرف هایم!</title>
+
+      <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+     
+    
+    <meta name="description" content="
+قسمت سوم آموزش کانفیگ سیستم مانیتورینگ رو شروع میکنیم با آموزش مانیتور کردن Nginx.
+
+" />
+    <meta property="og:description" content="
+قسمت سوم آموزش کانفیگ سیستم مانیتورینگ رو شروع میکنیم با آموزش مانیتور کردن Nginx.
+
+" />
+    <meta name="twitter:description" content="
+قسمت سوم آموزش کانفیگ سیستم مانیتورینگ رو شروع میکنیم با آموزش مانیتور کردن Nginx.
+
+" />
+    
+    <meta property="author" content="رسول صفری" />
+    
+    <meta name="keywords" content="monitoring,prometheus,devops,docker,linux,sysadmin,مانیتوریگ,لینوکس,مدیریت," />
+    
+    
+    <meta property="og:title" content="آموزش کانفیگ سیستم مانیتورینگ - Nginx" />
+    <meta name="twitter:title" content="آموزش کانفیگ سیستم مانیتورینگ - Nginx" />
+    
+    
+    <meta property="og:image" content="https://rasooll.com/images/post/nginx-logo.png" />
+    <meta name="twitter:image" content="https://rasooll.com/images/post/nginx-logo.png" />
+    <meta name="twitter:image:alt" content="آموزش کانفیگ سیستم مانیتورینگ - Nginx">
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:site" content="@rasooll_">
+    <meta name="twitter:creator" content="@rasooll_">
+    <meta property="og:url" content="https://rasooll.com/monitoring-system-nginx/">
+    <meta property="og:locale" content="fa">
+    <link rel="author" href="https://rasooll.com">
+    <link rel="shortcut icon" href="https://rasooll.com/images/favicon.png" type="image/png" sizes="150x150"> 
+
+
+  <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="alternate" type="application/rss+xml" title="رسول صفری - وبلاگی برای انتشار حرف هایم!" href="/feed.xml" />
+  <link rel="manifest" href="/manifest.json">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <header class="siteinfo">
+          <a href="/">
+            <img src="https://secure.gravatar.com/avatar/789598edd4440e0a5e0d8e37f4ae5de7?s=140&d=mm&r=g" alt="آواتار رسول صفری" class="rounded avatar" />
+          </a>
+          <a href="/" class="sitename">
+            <h1>رسول صفری</h1>
+          </a>
+          <p class="sitedescription">وبلاگی برای انتشار حرف هایم!</p>
+        </header>
+      </div>
+      <div class="col-md-5">
+        <nav class="font-titr topbar">
+          <div class="vertical-middle">
+            <a href="/archive">آرشیو</a>
+            <a href="/about">درباره‌ی من</a>
+            <a href="/contact">تماس با من</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="hrbtm"> </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <article class="post">
+  <h1>آموزش کانفیگ سیستم مانیتورینگ - Nginx</h1>
+
+  <div class="content">
+    <p align="center"><img src="/images/post/nginx-logo.png" alt="Monitoring Prometheus Grafana Nginx" /></p>
+<p>قسمت سوم آموزش کانفیگ سیستم مانیتورینگ رو شروع میکنیم با آموزش مانیتور کردن Nginx.</p>
+
+<p>یک ماژول هست به اسم <a href="https://github.com/vozlt/nginx-module-vts">nginx-module-vts</a> که دیتا های لازم برای مانیتور کردن Nginx را در اختیار ما قرار میدهد، در ابتدای کار باید این ماژول را نصب کنیم که نصب آن نیز به این صورت است:</p>
+
+<p>در توزیع اوبونتو ابتدا لازم است تا پیشنیازهای آن را نصب کنیم:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo apt install -y build-essential git tree
+<span class="gp">$ </span>sudo apt install -y perl libperl-dev libgd3 libgd-dev libgeoip1 libgeoip-dev geoip-bin libxml2 libxml2-dev libxslt1.1 libxslt1-dev
+</code></pre>
+</div>
+
+<p>سپس ماژول مربوطه را Clone می‌کنیم:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git clone git://github.com/vozlt/nginx-module-vts.git
+</code></pre>
+</div>
+
+<p>حال باید سورس Nginx را برای لینوکس دانلود کنیم <a href="http://nginx.org/download/">پیوند</a> و بعد از خارج کردن از حالت فشرده وارد دایرکتوری آن می‌شویم و دستورات زیر را اجرا میکنیم:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>./configure <span class="se">\</span>
+    --user<span class="o">=</span>nginx <span class="se">\</span>
+    --group<span class="o">=</span>nginx <span class="se">\</span>
+    --prefix<span class="o">=</span>/etc/nginx <span class="se">\</span>
+    --sbin-path<span class="o">=</span>/usr/sbin/nginx <span class="se">\</span>
+    --conf-path<span class="o">=</span>/etc/nginx/nginx.conf <span class="se">\</span>
+    --pid-path<span class="o">=</span>/var/run/nginx.pid <span class="se">\</span>
+    --lock-path<span class="o">=</span>/var/run/nginx.lock <span class="se">\</span>
+    --error-log-path<span class="o">=</span>/var/log/nginx/error.log <span class="se">\</span>
+    --http-log-path<span class="o">=</span>/var/log/nginx/access.log <span class="se">\</span>
+    --with-http_gzip_static_module <span class="se">\</span>
+    --with-http_stub_status_module <span class="se">\</span>
+    --with-http_ssl_module <span class="se">\</span>
+    --with-pcre <span class="se">\</span>
+    --with-file-aio <span class="se">\</span>
+    --with-http_realip_module <span class="se">\</span>
+    --without-http_scgi_module <span class="se">\</span>
+    --without-http_uwsgi_module <span class="se">\</span>
+    --without-http_fastcgi_module <span class="se">\</span>
+    --add-module<span class="o">=</span>/path/to/nginx-module-vts
+</code></pre>
+</div>
+
+<ul>
+  <li>توجه کنید که خط آخر دستور بالا باید آدرس دایرکتوری ماژولی که Clone کرده‌اید را وارد نمایید.</li>
+</ul>
+
+<p>و سپس:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>make
+<span class="gp">$ </span>sudo make install
+</code></pre>
+</div>
+
+<p>کامپایل Nginx هم به پایان رسید، حال به مرحله‌ی پیکربندی میرسیم.
+تنظیمات Nginx خود را باید به صورت زیر انجام دهید:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http {
+    vhost_traffic_status_zone;
+    ...
+    server {
+        ...
+        location /status {
+            vhost_traffic_status_display;
+            vhost_traffic_status_display_format html;
+        }
+    }
+}
+</code></pre>
+</div>
+
+<p>حال برای دریافت دیتا توسط Prometheus باید از exporter مربوط به این کار استفاده کنیم.</p>
+
+<p>روی سروری که Nginx نصب است بااستفاده از دستور زیر کانتینر مربوط به exporter را راه اندازی میکنیم:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>docker run  --restart always  --net host --env <span class="nv">NGINX_STATUS</span><span class="o">=</span><span class="s2">"http://localhost/status/format/json"</span> -d --name nginx-prometheus-exporter sophos/nginx-vts-exporter
+</code></pre>
+</div>
+
+<p>حال روی پورت ۹۹۱۳ می‌توانیم به این exporter دسترسی داشته باشیم.</p>
+
+<p>الان نوبت به تنظیمات Prometheus برای اتصال به این exporter رسیده ، فایل prometheus.yml را باز می‌کنیم و تنظیمات زیر را در آن قرار میدهیم:</p>
+
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="pi">-</span> <span class="s">job_name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">nginx-exporter"</span>
+    <span class="s">scrape_interval</span><span class="pi">:</span> <span class="s2">"</span><span class="s">15s"</span>
+    <span class="s">static_configs</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">targets</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">localhost:9913'</span><span class="pi">]</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>مقدار لوکال هاست باید با آدرس Nginx جایگزین گردد.</li>
+</ul>
+
+<p>کار تقریبا تمام است فقط برای رسم نمودار برای دیتا ها ، ما از Grafana استفاده می‌کردیم که در اینجا باید داشبورد مربوط به این ماژول <a href="https://grafana.com/dashboards/2949">2949</a> را نیز نصب کنیم.</p>
+
+<p><img src="/images/post/nginxchart.png" alt="Demo" /></p>
+
+  </div>
+
+  <div class="date">
+    نوشته شده در شنبه 03 آذر 1397
+  </div>
+  <div class="paginate">
+    <div class="row">
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/monitoring-system-grafana/" title="آموزش کانفیگ سیستم مانیتورینگ - Grafana">
+          <div class=" post-pg-btn post-previous">
+            <i class="fa fa-arrow-right pull-right" aria-hidden="true"></i> آموزش کانفیگ سیستم مانیتورینگ - Grafana
+          </div>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/monitoring-system-alertmanager/" title="آموزش کانفیگ سیستم مانیتورینگ - Alertmanager">
+          <div class=" post-pg-btn post-next">
+              <i class="fa fa-arrow-left pull-left" aria-hidden="true"></i> آموزش کانفیگ سیستم مانیتورینگ - Alertmanager
+          </div>
+        </a>
+      
+    </div>
+  </div>
+  </div>
+  <br />
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'https-rasooll-com';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+      </div>
+    </div>
+  </div>
+
+
+  <footer class="footer">
+    <div class="social-icon">
+    <a href="mailto:safari@rasooll.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+
+
+    <a href="https://github.com/rasooll"><i class="fa fa-github" aria-hidden="true"></i></a>
+
+
+
+    <a href="https://www.linkedin.com/in/rasoolsf"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+
+
+    <a href="https://www.twitter.com/rasooll_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+
+    <a href="/feed.xml"><i class="fa fa-rss" aria-hidden="true"></i></a></div>
+    <div class="footer-text">
+      <i class="fa fa-heart heart-color"></i>
+    </div>
+  </footer>
+
+
+
+  
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+    crossorigin="anonymous"></script>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try { clicky.init(101072468); } catch (e) { }</script>
+  <noscript>
+    <p>
+      <img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101072468ns.gif" />
+    </p>
+  </noscript>
+</body>
+
+</html>

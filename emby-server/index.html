@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+
+<head>
+  <title>آموزش راه اندازی مدیا سرور Emby – رسول صفری – وبلاگی برای انتشار حرف هایم!</title>
+
+      <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+     
+    
+    <meta name="description" content="
+چند وقتی بود که دوست داشتم فیلم هایی که داخل کامپیوتر خودم دارم رو بتونم بدون استفاده از فلش مموری داخل پخش کننده خانگی ببینم … این پخش کننده ما امکاناتی مثل FTP یا Kodi نداشت اما وای فای داشت که DLNA هم پشتیبانی میکرد برای همین به فکر افتادم تا فیلم هایم را با استفاده ا..." />
+    <meta property="og:description" content="
+چند وقتی بود که دوست داشتم فیلم هایی که داخل کامپیوتر خودم دارم رو بتونم بدون استفاده از فلش مموری داخل پخش کننده خانگی ببینم … این پخش کننده ما امکاناتی مثل FTP یا Kodi نداشت اما وای فای داشت که DLNA هم پشتیبانی میکرد برای همین به فکر افتادم تا فیلم هایم را با استفاده ا..." />
+    <meta name="twitter:description" content="
+چند وقتی بود که دوست داشتم فیلم هایی که داخل کامپیوتر خودم دارم رو بتونم بدون استفاده از فلش مموری داخل پخش کننده خانگی ببینم … این پخش کننده ما امکاناتی مثل FTP یا Kodi نداشت اما وای فای داشت که DLNA هم پشتیبانی میکرد برای همین به فکر افتادم تا فیلم هایم را با استفاده ا..." />
+    
+    <meta property="author" content="رسول صفری" />
+    
+    <meta name="keywords" content="مدیا سرور,emby,server,media,dlna," />
+    
+    
+    <meta property="og:title" content="آموزش راه اندازی مدیا سرور Emby" />
+    <meta name="twitter:title" content="آموزش راه اندازی مدیا سرور Emby" />
+    
+    
+    <meta name="twitter:site" content="@rasooll_">
+    <meta name="twitter:creator" content="@rasooll_">
+    <meta property="og:url" content="https://rasooll.com/emby-server/">
+    <meta property="og:locale" content="fa">
+    <link rel="author" href="https://rasooll.com">
+    <link rel="shortcut icon" href="https://rasooll.com/images/favicon.png" type="image/png" sizes="150x150"> 
+
+
+  <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="alternate" type="application/rss+xml" title="رسول صفری - وبلاگی برای انتشار حرف هایم!" href="/feed.xml" />
+  <link rel="manifest" href="/manifest.json">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <header class="siteinfo">
+          <a href="/">
+            <img src="https://secure.gravatar.com/avatar/789598edd4440e0a5e0d8e37f4ae5de7?s=140&d=mm&r=g" alt="آواتار رسول صفری" class="rounded avatar" />
+          </a>
+          <a href="/" class="sitename">
+            <h1>رسول صفری</h1>
+          </a>
+          <p class="sitedescription">وبلاگی برای انتشار حرف هایم!</p>
+        </header>
+      </div>
+      <div class="col-md-5">
+        <nav class="font-titr topbar">
+          <div class="vertical-middle">
+            <a href="/archive">آرشیو</a>
+            <a href="/about">درباره‌ی من</a>
+            <a href="/contact">تماس با من</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="hrbtm"> </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <article class="post">
+  <h1>آموزش راه اندازی مدیا سرور Emby</h1>
+
+  <div class="content">
+    <p><img src="/images/post/emby-server.png" alt="تصویری از مدیا سرور" title="Emby Server" /><br />
+چند وقتی بود که دوست داشتم فیلم هایی که داخل کامپیوتر خودم دارم رو بتونم بدون استفاده از فلش مموری داخل پخش کننده خانگی ببینم … این پخش کننده ما امکاناتی مثل FTP یا Kodi نداشت اما وای فای داشت که DLNA هم پشتیبانی میکرد برای همین به فکر افتادم تا فیلم هایم را با استفاده از DLNA روی شبکه به اشتراک بزارم و برای اینکار برنامه ی Emby رو پیدا کردم …</p>
+
+<p>برای نصب Emby Server در توزیع های گنو لینوکس:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>https://software.opensuse.org/download.html?project=home%3Aemby&amp;package=emby-server
+</code></pre>
+</div>
+
+<p>پس از نصب با استفاده از دستورات زیر سرور را اجرا کرده :</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo systemctl start emby-server
+<span class="gp">$ </span>sudo systemctl <span class="nb">enable </span>emby-server
+</code></pre>
+</div>
+
+<p>حال که Emby Server اجرا شد از طریق لینک زیر می توان به آن دسترسی داشت:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://localhost:8090
+</code></pre>
+</div>
+
+<p>وقتی برای اولین بار وارد تنظیمات سرور شدید یک ویزارد برای شما باز شده و تنظیمات آنرا انجام میدهید (تنظیمات سختی نداشت اما زمان انجام یادم رفت عکس بگیرم 😐  ).</p>
+
+<p>اما کل کاری که باید انجام بدید به این صورت هست که فولدری که ویدئو های شما در اون قرار داره باید به سرور معرفی بشه.</p>
+
+<p>حالا وقتی دستگاه پخش کننده شما به وای فای وصل باشه و وارد برنامه ی  DLNA DMP شوید فولدری که به اشتراک گذاشته اید را مشاهده کرده و میتوانید تمامی ویدئو هایتان را به راحتی مشاهده کنید. 😉</p>
+
+  </div>
+
+  <div class="date">
+    نوشته شده در چهارشنبه 13 اردیبهشت 1396
+  </div>
+  <div class="paginate">
+    <div class="row">
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/%D8%B3%D9%84%D8%A7%D9%85-%D8%AF%D9%86%DB%8C%D8%A7/" title="این اولین وبلاگ من است!">
+          <div class=" post-pg-btn post-previous">
+            <i class="fa fa-arrow-right pull-right" aria-hidden="true"></i> این اولین وبلاگ من است!
+          </div>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/encfs/" title="چگونه یک فضای ابری ایمن داشته باشیم ؟">
+          <div class=" post-pg-btn post-next">
+              <i class="fa fa-arrow-left pull-left" aria-hidden="true"></i> چگونه یک فضای ابری ایمن داشته باشیم ؟
+          </div>
+        </a>
+      
+    </div>
+  </div>
+  </div>
+  <br />
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'https-rasooll-com';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+      </div>
+    </div>
+  </div>
+
+
+  <footer class="footer">
+    <div class="social-icon">
+    <a href="mailto:safari@rasooll.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+
+
+    <a href="https://github.com/rasooll"><i class="fa fa-github" aria-hidden="true"></i></a>
+
+
+
+    <a href="https://www.linkedin.com/in/rasoolsf"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+
+
+    <a href="https://www.twitter.com/rasooll_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+
+    <a href="/feed.xml"><i class="fa fa-rss" aria-hidden="true"></i></a></div>
+    <div class="footer-text">
+      <i class="fa fa-heart heart-color"></i>
+    </div>
+  </footer>
+
+
+
+  
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+    crossorigin="anonymous"></script>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try { clicky.init(101072468); } catch (e) { }</script>
+  <noscript>
+    <p>
+      <img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101072468ns.gif" />
+    </p>
+  </noscript>
+</body>
+
+</html>

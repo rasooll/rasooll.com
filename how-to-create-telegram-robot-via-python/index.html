@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+
+<head>
+  <title>ساخت ربات تلگرام ساده با پایتون ، از آماده سازی تا اجرا – رسول صفری – وبلاگی برای انتشار حرف هایم!</title>
+
+      <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+     
+    
+    <meta name="description" content="امروز برای اولین بار یک ربات بسیار ساده برای تلگرام با پایتون آماده کردم ، این ربات فقط این امکان رو داره که برای دستوراتی که شما ارسال می‌کنید یکسری پاسخ ثابت ارسال کند.
+یکی از مشکلاتی که بعد از آماده سازی این ربات داشتم این بود که کجا میزبانی بشه ؟؟؟
+
+" />
+    <meta property="og:description" content="امروز برای اولین بار یک ربات بسیار ساده برای تلگرام با پایتون آماده کردم ، این ربات فقط این امکان رو داره که برای دستوراتی که شما ارسال می‌کنید یکسری پاسخ ثابت ارسال کند.
+یکی از مشکلاتی که بعد از آماده سازی این ربات داشتم این بود که کجا میزبانی بشه ؟؟؟
+
+" />
+    <meta name="twitter:description" content="امروز برای اولین بار یک ربات بسیار ساده برای تلگرام با پایتون آماده کردم ، این ربات فقط این امکان رو داره که برای دستوراتی که شما ارسال می‌کنید یکسری پاسخ ثابت ارسال کند.
+یکی از مشکلاتی که بعد از آماده سازی این ربات داشتم این بود که کجا میزبانی بشه ؟؟؟
+
+" />
+    
+    <meta property="author" content="رسول صفری" />
+    
+    <meta name="keywords" content="python,telegram,bot,robot,پایتون,تلگرام,ربات,بات تلگرام,هاست رایگان پایتون,میزبانی پایتون,ربات پایتون," />
+    
+    
+    <meta property="og:title" content="ساخت ربات تلگرام ساده با پایتون ، از آماده سازی تا اجرا" />
+    <meta name="twitter:title" content="ساخت ربات تلگرام ساده با پایتون ، از آماده سازی تا اجرا" />
+    
+    
+    <meta property="og:image" content="https://rasooll.com/images/post/pythonanywhere.png" />
+    <meta name="twitter:image" content="https://rasooll.com/images/post/pythonanywhere.png" />
+    <meta name="twitter:image:alt" content="ساخت ربات تلگرام ساده با پایتون ، از آماده سازی تا اجرا">
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:site" content="@rasooll_">
+    <meta name="twitter:creator" content="@rasooll_">
+    <meta property="og:url" content="https://rasooll.com/how-to-create-telegram-robot-via-python/">
+    <meta property="og:locale" content="fa">
+    <link rel="author" href="https://rasooll.com">
+    <link rel="shortcut icon" href="https://rasooll.com/images/favicon.png" type="image/png" sizes="150x150"> 
+
+
+  <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="alternate" type="application/rss+xml" title="رسول صفری - وبلاگی برای انتشار حرف هایم!" href="/feed.xml" />
+  <link rel="manifest" href="/manifest.json">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <header class="siteinfo">
+          <a href="/">
+            <img src="https://secure.gravatar.com/avatar/789598edd4440e0a5e0d8e37f4ae5de7?s=140&d=mm&r=g" alt="آواتار رسول صفری" class="rounded avatar" />
+          </a>
+          <a href="/" class="sitename">
+            <h1>رسول صفری</h1>
+          </a>
+          <p class="sitedescription">وبلاگی برای انتشار حرف هایم!</p>
+        </header>
+      </div>
+      <div class="col-md-5">
+        <nav class="font-titr topbar">
+          <div class="vertical-middle">
+            <a href="/archive">آرشیو</a>
+            <a href="/about">درباره‌ی من</a>
+            <a href="/contact">تماس با من</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="hrbtm"> </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <article class="post">
+  <h1>ساخت ربات تلگرام ساده با پایتون ، از آماده سازی تا اجرا</h1>
+
+  <div class="content">
+    <p>امروز برای اولین بار یک ربات بسیار ساده برای تلگرام با پایتون آماده کردم ، این ربات فقط این امکان رو داره که برای دستوراتی که شما ارسال می‌کنید یکسری پاسخ ثابت ارسال کند.
+یکی از مشکلاتی که بعد از آماده سازی این ربات داشتم این بود که کجا میزبانی بشه ؟؟؟</p>
+
+<p>روی سرورمجازی ؟ این مورد با توجه به امکانات ساده ربات اصلا توجیه اقتصادی نداشت ، با یک جستجوی کوتاه به سایت <a href="https://www.pythonanywhere.com" target="_blank">PythonAnyWhere</a> رسیدم که پلن های مختلفی داشت اما یک سرویس رایگان با امکانات خیلی خیلی محدود هم داشت که برای این ربات من کاملا کافی بود .</p>
+
+<p>خوب دیگه بریم شروع کنیم…  اول از همه باید عضو این سایت شد.  <a href="https://www.pythonanywhere.com/registration/register/beginner/" target="_blank">پیوند</a></p>
+
+<p><img src="/images/post/pythonanywhere.png" alt="Dashboard" /></p>
+
+<p>راستی تا یادم نرفته باید بگم در این آموزش ما باید از پایتون ۲ استفاده کنیم.</p>
+
+<p>حالا باید از بخش Start new console روی گزینه‌ی Bash کلیک کنیدتا یک کنسول جدید برایمان باز شود.</p>
+
+<p>سپس در کنسول باز شده دستور زیر را وارد می‌کنیم:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>virtualenv --python<span class="o">=</span>python2.7 myappname
+</code></pre>
+</div>
+
+<p>این دستور باعث میشه یک محیط مجازی پایتون ۲.۷ برایمان در پوشه‌ی myappname ایجاد شود.</p>
+
+<p>حالا با دستور زیر وارد این محیط مجازی میشویم</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">source </span>myappname/bin/activate
+</code></pre>
+</div>
+
+<p>حالا باید کتابخانه های مربوط به تلگرام را نصب کنیم با دستور زیر:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>pip install python-telegram-bot
+</code></pre>
+</div>
+
+<p>اگر همه چیز درست پیش رفته باشه مثل تصویر زیر داریم :</p>
+
+<p><img src="/images/post/bash-console.png" alt="Bash-Console" /></p>
+
+<p>حالا باید از تب Files برنامه‌ی ربات خودمون رو آپلود کنیم.</p>
+
+<p>بهترین منبع برای یاد گیری نحوه‌ی ساختن ربات داکیومنت های خود کتابخانه هست <a href="https://python-telegram-bot.readthedocs.io/en/stable/" target="_blank">پیوند</a></p>
+
+<p>یکسری کد آماده هم من توی اینترنت پیدا کردم و در گیت هاب آپلود کردم <a href="https://github.com/rasoolsf/python-telegram-bot-sample" target="_blank">پیوند</a></p>
+
+<p>سورس کدی هم که امروز خودم نوشتم و فقط از ۳ تا دستور پشتیبانی می‌کنه:</p>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python2</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">telegram.ext</span> <span class="kn">import</span> <span class="n">Updater</span><span class="p">,</span> <span class="n">CommandHandler</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">updater</span> <span class="o">=</span> <span class="n">Updater</span><span class="p">(</span><span class="s">'TOKEN'</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s">'mylogs.txt'</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">'</span><span class="si">%(asctime)</span><span class="s">s - </span><span class="si">%(levelname)</span><span class="s">s - </span><span class="si">%(message)</span><span class="s">s'</span><span class="p">,</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="c">#Robot Function</span>
+<span class="k">def</span> <span class="nf">start_method</span><span class="p">(</span><span class="n">bot</span><span class="p">,</span> <span class="n">update</span><span class="p">):</span>
+    <span class="n">bot</span><span class="o">.</span><span class="n">sendMessage</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">chat_id</span><span class="p">,</span> <span class="s">"به ربات تلگرام انجمن مهندسی برق یادگار خوش امدید."</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">site_link</span><span class="p">(</span><span class="n">bot</span><span class="p">,</span> <span class="n">update</span><span class="p">):</span>
+    <span class="n">bot</span><span class="o">.</span><span class="n">sendMessage</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">chat_id</span><span class="p">,</span> <span class="s">"🔗 آدرس سایت انجمن علمی مهندسی برق یادگار:</span><span class="se">\n</span><span class="s">http://elecom-rey.ir"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">gp_link</span><span class="p">(</span><span class="n">bot</span><span class="p">,</span> <span class="n">update</span><span class="p">):</span>
+    <span class="n">bot</span><span class="o">.</span><span class="n">sendMessage</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">chat_id</span><span class="p">,</span> <span class="s">"👥 لینک گروه انجمن علمی مهندسی برق یادگار:</span><span class="se">\n</span><span class="s">https://t.me/joinchat/AAAAAELj1_CHowd_zNaphA"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">taghvim_amoozeshi</span><span class="p">(</span><span class="n">bot</span><span class="p">,</span> <span class="n">update</span><span class="p">):</span>
+    <span class="n">payam</span><span class="o">=</span><span class="s">"""
+    🗓 تقویم آموزشی نیم سال اول ۹۶-۹۷:</span><span class="se">\n</span><span class="s">
+    ⬅ نام‌نویسی:</span><span class="se">\n</span><span class="s">یک‌شنبه ۱۲/۶/۹۶ تا چهارشنبه ۲۲/۶/۹۶</span><span class="se">\n</span><span class="s">
+    ⬅ شروع کلاس‌ها:</span><span class="se">\n</span><span class="s">شنبه ۲۵/۶/۹۶</span><span class="se">\n</span><span class="s">
+    ⬅ ثبت نام با تاخیر:</span><span class="se">\n</span><span class="s">شنبه ۲۵/۶/۹۶ تا پنجشنبه ۱۳/۷/۹۶</span><span class="se">\n</span><span class="s">
+    ⬅ حذف و اضافه:</span><span class="se">\n</span><span class="s">دوشنبه ۱۰/۷/۹۶ تا پنج‌شنبه ۱۳/۷/۹۶ </span><span class="se">\n</span><span class="s">
+    ⬅ پایان‌کلاس‌ها:</span><span class="se">\n</span><span class="s">پنج‌شنبه ۱۴/۱۰/۹۶</span><span class="se">\n</span><span class="s">
+    ⬅ امتحانات پایان ترم:</span><span class="se">\n</span><span class="s">شنبه ۱۶/۱۰/۹۶ تا پنج‌شنبه ۲۸/۱۰/۹۶</span><span class="se">\n\n</span><span class="s">@elecomrey_bot
+    """</span>
+    <span class="n">bot</span><span class="o">.</span><span class="n">sendMessage</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">chat_id</span><span class="p">,</span> <span class="n">payam</span><span class="p">)</span>
+
+<span class="c"># Robot Handler</span>
+<span class="n">updater</span><span class="o">.</span><span class="n">dispatcher</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">CommandHandler</span><span class="p">(</span><span class="s">'start'</span><span class="p">,</span> <span class="n">start_method</span><span class="p">))</span>
+<span class="n">updater</span><span class="o">.</span><span class="n">dispatcher</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">CommandHandler</span><span class="p">(</span><span class="s">'site'</span><span class="p">,</span> <span class="n">site_link</span><span class="p">))</span>
+<span class="n">updater</span><span class="o">.</span><span class="n">dispatcher</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">CommandHandler</span><span class="p">(</span><span class="s">'group'</span><span class="p">,</span> <span class="n">gp_link</span><span class="p">))</span>
+<span class="n">updater</span><span class="o">.</span><span class="n">dispatcher</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">CommandHandler</span><span class="p">(</span><span class="s">'taghvim'</span><span class="p">,</span> <span class="n">taghvim_amoozeshi</span><span class="p">))</span>
+
+<span class="n">updater</span><span class="o">.</span><span class="n">start_polling</span><span class="p">()</span>
+<span class="c"># for exit</span>
+<span class="n">updater</span><span class="o">.</span><span class="n">idle</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>در تمامی نمونه کدها شما باید به جای عبارت TOKEN مقدار دریافتی از BotFather را وارد نمایید.</p>
+
+<p>حالا نوبت به اجرا کردن کد میرسه</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>python2 myappname/telegrom_bot.py
+</code></pre>
+</div>
+
+<p>در اینجا اسم فایلی که آپلود کردیم <code class="highlighter-rouge">telegram_bot.py</code> است.</p>
+
+<p>حالا میتونیم پنجره مربوط به کنسول را ببندیم و برنامه اجرا خواهد ماند.</p>
+
+<p>امیدوارم این مطلب مفید بوده باشه.</p>
+
+  </div>
+
+  <div class="date">
+    نوشته شده در شنبه 01 مهر 1396
+  </div>
+  <div class="paginate">
+    <div class="row">
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/jadi-python/" title="رایگان پایتون بیاموزید">
+          <div class=" post-pg-btn post-previous">
+            <i class="fa fa-arrow-right pull-right" aria-hidden="true"></i> رایگان پایتون بیاموزید
+          </div>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/how-to-install-wordpress-via-docker/" title="آموزش نصب وردپرس توسط داکر">
+          <div class=" post-pg-btn post-next">
+              <i class="fa fa-arrow-left pull-left" aria-hidden="true"></i> آموزش نصب وردپرس توسط داکر
+          </div>
+        </a>
+      
+    </div>
+  </div>
+  </div>
+  <br />
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'https-rasooll-com';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+      </div>
+    </div>
+  </div>
+
+
+  <footer class="footer">
+    <div class="social-icon">
+    <a href="mailto:safari@rasooll.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+
+
+    <a href="https://github.com/rasooll"><i class="fa fa-github" aria-hidden="true"></i></a>
+
+
+
+    <a href="https://www.linkedin.com/in/rasoolsf"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+
+
+    <a href="https://www.twitter.com/rasooll_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+
+    <a href="/feed.xml"><i class="fa fa-rss" aria-hidden="true"></i></a></div>
+    <div class="footer-text">
+      <i class="fa fa-heart heart-color"></i>
+    </div>
+  </footer>
+
+
+
+  
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+    crossorigin="anonymous"></script>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try { clicky.init(101072468); } catch (e) { }</script>
+  <noscript>
+    <p>
+      <img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101072468ns.gif" />
+    </p>
+  </noscript>
+</body>
+
+</html>

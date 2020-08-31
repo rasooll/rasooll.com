@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+
+<head>
+  <title>آموزش استفاده از Ceph RBD در کوبرنتیز – رسول صفری – وبلاگی برای انتشار حرف هایم!</title>
+
+      <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+     
+    
+    <meta name="description" content="
+امروز می‌خوام توی این پست درباره‌ی نحوه استفاده از Ceph RDB در PVC های کوبرنتیز بنویسم. 
+توجه: در این آموزش فرض بر این است که شما از یک Ceph provider سرویس می‌گیرید، لذا از توضیحات مربوط به ساخت Pool در Ceph صرف نظر شده است.
+
+" />
+    <meta property="og:description" content="
+امروز می‌خوام توی این پست درباره‌ی نحوه استفاده از Ceph RDB در PVC های کوبرنتیز بنویسم. 
+توجه: در این آموزش فرض بر این است که شما از یک Ceph provider سرویس می‌گیرید، لذا از توضیحات مربوط به ساخت Pool در Ceph صرف نظر شده است.
+
+" />
+    <meta name="twitter:description" content="
+امروز می‌خوام توی این پست درباره‌ی نحوه استفاده از Ceph RDB در PVC های کوبرنتیز بنویسم. 
+توجه: در این آموزش فرض بر این است که شما از یک Ceph provider سرویس می‌گیرید، لذا از توضیحات مربوط به ساخت Pool در Ceph صرف نظر شده است.
+
+" />
+    
+    <meta property="author" content="رسول صفری" />
+    
+    <meta name="keywords" content="kubernetes,k8s,ceph,rbd,remotestorage,storageclass," />
+    
+    
+    <meta property="og:title" content="آموزش استفاده از Ceph RBD در کوبرنتیز" />
+    <meta name="twitter:title" content="آموزش استفاده از Ceph RBD در کوبرنتیز" />
+    
+    
+    <meta property="og:image" content="https://rasooll.com/images/post/k8s-ceph.png" />
+    <meta name="twitter:image" content="https://rasooll.com/images/post/k8s-ceph.png" />
+    <meta name="twitter:image:alt" content="آموزش استفاده از Ceph RBD در کوبرنتیز">
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:site" content="@rasooll_">
+    <meta name="twitter:creator" content="@rasooll_">
+    <meta property="og:url" content="https://rasooll.com/how-to-use-ceph-rbd-in-k8s/">
+    <meta property="og:locale" content="fa">
+    <link rel="author" href="https://rasooll.com">
+    <link rel="shortcut icon" href="https://rasooll.com/images/favicon.png" type="image/png" sizes="150x150"> 
+
+
+  <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="alternate" type="application/rss+xml" title="رسول صفری - وبلاگی برای انتشار حرف هایم!" href="/feed.xml" />
+  <link rel="manifest" href="/manifest.json">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <header class="siteinfo">
+          <a href="/">
+            <img src="https://secure.gravatar.com/avatar/789598edd4440e0a5e0d8e37f4ae5de7?s=140&d=mm&r=g" alt="آواتار رسول صفری" class="rounded avatar" />
+          </a>
+          <a href="/" class="sitename">
+            <h1>رسول صفری</h1>
+          </a>
+          <p class="sitedescription">وبلاگی برای انتشار حرف هایم!</p>
+        </header>
+      </div>
+      <div class="col-md-5">
+        <nav class="font-titr topbar">
+          <div class="vertical-middle">
+            <a href="/archive">آرشیو</a>
+            <a href="/about">درباره‌ی من</a>
+            <a href="/contact">تماس با من</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="hrbtm"> </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <article class="post">
+  <h1>آموزش استفاده از Ceph RBD در کوبرنتیز</h1>
+
+  <div class="content">
+    <p align="center"><img src="/images/post/k8s-ceph.png" alt="Kubernetes + Ceph LOGO" /></p>
+<p>امروز می‌خوام توی این پست درباره‌ی نحوه استفاده از Ceph RDB در PVC های کوبرنتیز بنویسم. <br />
+توجه: در این آموزش فرض بر این است که شما از یک Ceph provider سرویس می‌گیرید، لذا از توضیحات مربوط به ساخت Pool در Ceph صرف نظر شده است.</p>
+
+<p>خب تا اینجای کار شما باید اطلاعات اتصال به یک Ceph pool را داشته باشید که در ادامه از آنها استفاده خواهیم کرد.</p>
+
+<h3 id="قدم-اول---راه-اندازی-rbd-provisioner-">قدم اول - راه اندازی rbd-provisioner :</h3>
+
+<p>برای دیپلوی کردن rbd-provisioner می‌توانید از این <a href="https://github.com/rasooll/rbd-provisioner">پروژه</a> در گیت‌هاب با استفاده از دستورات زیر استفاده کنید:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git clone https://github.com/rasooll/rbd-provisioner.git
+<span class="gp">$ </span>kubectl apply -n kube-system -f ./rbd-provisioner/deply
+</code></pre>
+</div>
+
+<p>به این صورت می‌توانیم دیپلوی را چک کنیم:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ kubectl get pods -l app=rbd-provisioner -n kube-system
+NAME                               READY   STATUS    RESTARTS   AGE
+rbd-provisioner-75b85f85bd-p9b8c   1/1     Running   0         3m45s
+</code></pre>
+</div>
+
+<p>در اینجا ما توانستیم rbd-provisioner را در نیم‌اسپیس <code class="highlighter-rouge">kube-system</code> دیپلوی کنیم.</p>
+
+<h3 id="قدم-دوم---ساخت-secretها">قدم دوم - ساخت Secretها:</h3>
+
+<p>برای <code class="highlighter-rouge">admin-key</code> و <code class="highlighter-rouge">client-key</code> که از سرویس دهنده Ceph گرفته‌ایم نیاز است یک سکرت به صورت زیر بسازیم:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>kubectl create secret generic ceph-admin-secret <span class="se">\</span>
+    --type<span class="o">=</span><span class="s2">"kubernetes.io/rbd"</span> <span class="se">\</span>
+    --from-literal<span class="o">=</span><span class="nv">key</span><span class="o">=</span><span class="s1">'&lt;key-value&gt;'</span> <span class="se">\</span>
+    --namespace<span class="o">=</span>kube-system
+</code></pre>
+</div>
+
+<p>به جای <code class="highlighter-rouge">&lt;key-value&gt;</code> باید مقدار <code class="highlighter-rouge">admin-key</code> خود را قرار دهید.
+و برای <code class="highlighter-rouge">client-key</code> هم به همین صورت:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code>kubectl create secret generic ceph-k8s-secret <span class="se">\</span>
+  --type<span class="o">=</span><span class="s2">"kubernetes.io/rbd"</span> <span class="se">\</span>
+  --from-literal<span class="o">=</span><span class="nv">key</span><span class="o">=</span><span class="s1">'&lt;key-value&gt;'</span> <span class="se">\</span>
+  --namespace<span class="o">=</span>kube-system
+</code></pre>
+</div>
+
+<h3 id="قدم-سوم---ساخت-storage-class">قدم سوم - ساخت Storage Class:</h3>
+
+<p>فرض می‌کنیم آدرس مانیتورهای Ceph ما به صورت زیر باشد:</p>
+
+<ul>
+  <li>10.10.10.11:6789</li>
+  <li>10.10.10.12:6789</li>
+  <li>10.10.10.13:6789</li>
+</ul>
+
+<p>لازم هست برای آنها Service و ‌Endpoint بسازیم چون اگر زمانی آدرس آنها تغییر کند و ما مستقیما از آنها در storageClass خود استفاده کرده باشیم تمامی PVC هایی که قبلا ساخته ایم دیگر کار نخواهند کرد.</p>
+
+<p>در ابتدا این پروژه را Clone می‌کنیم:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git clone https://github.com/rasooll/k8s-ceph-storageclass.git
+</code></pre>
+</div>
+
+<p>سپس فایل های endpoint و storageClass را با اطلاعاتی که از سرویس دهنده Ceph گرفته‌ایم تکمیل می‌کنیم و با استفاده از دستور زیر storageClass را می‌سازیم:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>kubectl apply -n kube-system -f ./k8s-ceph-storageclass/deploy
+</code></pre>
+</div>
+
+<h3 id="قدم-چهارم---ساخت-pvc-برای-تست">قدم چهارم - ساخت PVC برای تست:</h3>
+
+<p>ابتدا فایل مربوط به ساخت pvc را ایجاد می‌کنیم:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>vim ceph-rbd-claim.yml
+</code></pre>
+</div>
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="s">kind</span><span class="pi">:</span> <span class="s">PersistentVolumeClaim</span>
+<span class="s">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="s">metadata</span><span class="pi">:</span>
+  <span class="s">name</span><span class="pi">:</span> <span class="s">ceph-rbd-claim1</span>
+<span class="s">spec</span><span class="pi">:</span>
+  <span class="s">accessModes</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">ReadWriteOnce</span>
+  <span class="s">storageClassName</span><span class="pi">:</span> <span class="s">ceph-rbd</span>
+  <span class="s">resources</span><span class="pi">:</span>
+    <span class="s">requests</span><span class="pi">:</span>
+      <span class="s">storage</span><span class="pi">:</span> <span class="s">1Gi</span>
+</code></pre>
+</div>
+
+<p>سپس آن را اعمال می‌کنیم:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>kubectl apply -f ceph-rbd-claim.yml
+persistentvolumeclaim/ceph-rbd-claim1 created
+</code></pre>
+</div>
+
+<p>و در نهایت خواهیم داشت:</p>
+
+<div class="language-sh highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>kubectl get pvc
+NAME              STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+ceph-rbd-claim1   Bound    pvc-c6f4399d-43cf-4fc1-ba14-cc22f5c85304   1Gi        RWO            ceph-rbd       43s
+</code></pre>
+</div>
+<p>اگر مانند خروجی بالا بود که همه چیز ردیف هست اما اگر نبود به من پیام بدید!</p>
+
+  </div>
+
+  <div class="date">
+    نوشته شده در یک‌شنبه 04 خرداد 1399
+  </div>
+  <div class="paginate">
+    <div class="row">
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/install-letsencrypt-in-zimbra/" title="آموزش استفاده از گواهی LetsEncrypt SSL در ایمیل سرور Zimbra">
+          <div class=" post-pg-btn post-previous">
+            <i class="fa fa-arrow-right pull-right" aria-hidden="true"></i> آموزش استفاده از گواهی LetsEncrypt SSL در ایمیل سرور Zimbra
+          </div>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+    </div>
+  </div>
+  </div>
+  <br />
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'https-rasooll-com';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+      </div>
+    </div>
+  </div>
+
+
+  <footer class="footer">
+    <div class="social-icon">
+    <a href="mailto:safari@rasooll.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+
+
+    <a href="https://github.com/rasooll"><i class="fa fa-github" aria-hidden="true"></i></a>
+
+
+
+    <a href="https://www.linkedin.com/in/rasoolsf"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+
+
+    <a href="https://www.twitter.com/rasooll_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+
+    <a href="/feed.xml"><i class="fa fa-rss" aria-hidden="true"></i></a></div>
+    <div class="footer-text">
+      <i class="fa fa-heart heart-color"></i>
+    </div>
+  </footer>
+
+
+
+  
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+    crossorigin="anonymous"></script>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try { clicky.init(101072468); } catch (e) { }</script>
+  <noscript>
+    <p>
+      <img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101072468ns.gif" />
+    </p>
+  </noscript>
+</body>
+
+</html>

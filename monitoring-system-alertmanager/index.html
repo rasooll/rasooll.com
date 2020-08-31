@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+
+<head>
+  <title>آموزش کانفیگ سیستم مانیتورینگ - Alertmanager – رسول صفری – وبلاگی برای انتشار حرف هایم!</title>
+
+      <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+     
+    
+    <meta name="description" content="
+قسمت چهارم از سری آموزش های کانفیگ سیستم مانیتورینگ توسط Prometheus را شروع می‌کنیم.
+در این بخش قصد داریم تا Alertmanager را کانفیگ کنیم، تا هر زمانی که مقدار دیتایی که در حال مانیتور کردن آن هستیم از حد مشخصی فاصله گرفت به سرعت با خبر شویم.
+
+" />
+    <meta property="og:description" content="
+قسمت چهارم از سری آموزش های کانفیگ سیستم مانیتورینگ توسط Prometheus را شروع می‌کنیم.
+در این بخش قصد داریم تا Alertmanager را کانفیگ کنیم، تا هر زمانی که مقدار دیتایی که در حال مانیتور کردن آن هستیم از حد مشخصی فاصله گرفت به سرعت با خبر شویم.
+
+" />
+    <meta name="twitter:description" content="
+قسمت چهارم از سری آموزش های کانفیگ سیستم مانیتورینگ توسط Prometheus را شروع می‌کنیم.
+در این بخش قصد داریم تا Alertmanager را کانفیگ کنیم، تا هر زمانی که مقدار دیتایی که در حال مانیتور کردن آن هستیم از حد مشخصی فاصله گرفت به سرعت با خبر شویم.
+
+" />
+    
+    <meta property="author" content="رسول صفری" />
+    
+    <meta name="keywords" content="monitoring,prometheus,devops,docker,linux,sysadmin,مانیتوریگ,لینوکس,مدیریت," />
+    
+    
+    <meta property="og:title" content="آموزش کانفیگ سیستم مانیتورینگ - Alertmanager" />
+    <meta name="twitter:title" content="آموزش کانفیگ سیستم مانیتورینگ - Alertmanager" />
+    
+    
+    <meta property="og:image" content="https://rasooll.com/images/post/prometheus-logo.png" />
+    <meta name="twitter:image" content="https://rasooll.com/images/post/prometheus-logo.png" />
+    <meta name="twitter:image:alt" content="آموزش کانفیگ سیستم مانیتورینگ - Alertmanager">
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:site" content="@rasooll_">
+    <meta name="twitter:creator" content="@rasooll_">
+    <meta property="og:url" content="https://rasooll.com/monitoring-system-alertmanager/">
+    <meta property="og:locale" content="fa">
+    <link rel="author" href="https://rasooll.com">
+    <link rel="shortcut icon" href="https://rasooll.com/images/favicon.png" type="image/png" sizes="150x150"> 
+
+
+  <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="alternate" type="application/rss+xml" title="رسول صفری - وبلاگی برای انتشار حرف هایم!" href="/feed.xml" />
+  <link rel="manifest" href="/manifest.json">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <header class="siteinfo">
+          <a href="/">
+            <img src="https://secure.gravatar.com/avatar/789598edd4440e0a5e0d8e37f4ae5de7?s=140&d=mm&r=g" alt="آواتار رسول صفری" class="rounded avatar" />
+          </a>
+          <a href="/" class="sitename">
+            <h1>رسول صفری</h1>
+          </a>
+          <p class="sitedescription">وبلاگی برای انتشار حرف هایم!</p>
+        </header>
+      </div>
+      <div class="col-md-5">
+        <nav class="font-titr topbar">
+          <div class="vertical-middle">
+            <a href="/archive">آرشیو</a>
+            <a href="/about">درباره‌ی من</a>
+            <a href="/contact">تماس با من</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="hrbtm"> </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <article class="post">
+  <h1>آموزش کانفیگ سیستم مانیتورینگ - Alertmanager</h1>
+
+  <div class="content">
+    <p align="center"><img src="/images/post/prometheus-logo.png" alt="Monitoring Prometheus Alertmanager" /></p>
+<p>قسمت چهارم از سری آموزش های کانفیگ سیستم مانیتورینگ توسط Prometheus را شروع می‌کنیم.
+در این بخش قصد داریم تا Alertmanager را کانفیگ کنیم، تا هر زمانی که مقدار دیتایی که در حال مانیتور کردن آن هستیم از حد مشخصی فاصله گرفت به سرعت با خبر شویم.</p>
+
+<h3 id="چرا-prometheus-alertmanager-">چرا Prometheus Alertmanager ؟</h3>
+
+<p>چون قابلیت شخصی سازی بسیار زیادی دارد و تقریبا می‌توان گفت کنترل همه چیز در دستان شماست!
+می‌توانید تنظیم کنید برایتان ایمیل ارسال شود یا از طریق تلگرام، Slack و … شما را مطلع سازد، همچنین قابلیت ارسال Alert از طریق وب هوک به دیگر سیستم‌ها را نیز دارا می‌باشد.</p>
+
+<p>برای یادگیری بهتر این آموزش لازم است تا قسمت‌های قبلی آن را دیده باشید(دسترسی در پایین صفحه)</p>
+
+<p>برای شروع باید فایل docker-compose.yml را ویرایش کنیم و کانتینر مربوط به Alertmanager را اضافه کنیم:</p>
+
+<div class="language-ruby highlighter-rouge"><pre class="highlight"><code><span class="ss">alertmanager:
+image: </span><span class="n">quay</span><span class="p">.</span><span class="nf">io</span><span class="o">/</span><span class="n">prometheus</span><span class="o">/</span><span class="n">alertmanager</span><span class="ss">:latest</span>
+<span class="ss">volumes:
+</span><span class="o">-</span> <span class="p">.</span><span class="nf">/</span><span class="n">alertmanager_volume</span><span class="o">/</span><span class="n">alertmanager</span><span class="p">.</span><span class="nf">yml</span><span class="ss">:/</span><span class="n">etc</span><span class="o">/</span><span class="n">prometheus</span><span class="o">/</span><span class="n">alertmanager</span><span class="p">.</span><span class="nf">yml</span>
+<span class="o">-</span> <span class="p">.</span><span class="nf">/</span><span class="n">alertmanager_volume</span><span class="o">/</span><span class="n">data</span><span class="ss">:/</span><span class="n">data</span>
+<span class="ss">command:
+</span><span class="o">-</span> <span class="s1">'--config.file=/etc/prometheus/alertmanager.yml'</span>
+<span class="o">-</span> <span class="s1">'--storage.path=/data'</span>
+<span class="ss">ports:
+</span><span class="o">-</span> <span class="mi">9093</span><span class="p">:</span><span class="mi">9093</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>همچنین لازم است تا کانتینر alertmanager در کانتینر prom نیز لینک شود.</li>
+</ul>
+
+<p>سپس یک دایرکتوری به نام alertmanager_volume ایجاد کرده و فایل alertmanager.yml را داخل آن ایجاد میکنیم، محتویات این فایل به صورت زیر است:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>global:
+  # The smarthost and SMTP sender used for mail notifications.
+  smtp_smarthost: 'smtp.google.com:587'
+  smtp_from: 'your-alerting-email@google.com'
+  smtp_auth_username: 'your-alerting-email@gmail.com'
+  smtp_auth_password: 'your-password'
+
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 3h
+  receiver: 'support-team-email'
+receivers:
+- name: 'support-team-email'
+  email_configs:
+      - to: 'your-email-for-get-alert@example.com'
+          send_resolved: true
+</code></pre>
+</div>
+
+<p>حال باید فایل prometheus.yml را که در قسمت اول ساختیم ویرایش نماییم و تنظیمات زیر را به آن اضافه نماییم:alerting:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  alertmanagers:
+    - static_configs:
+      - targets:
+        - alertmanager:9093
+rule_files:
+  - "prometheus.rules.yml"
+</code></pre>
+</div>
+
+<ul>
+  <li>مقدار alertmanager:9093 همان نامی از که شما زمان لینک کردن alertmanager به prometheus وارد کرده‌اید.</li>
+</ul>
+
+<p>حال در کنار فایل prometheus.yml یک فایل جدید ایجاد می‌کنیم و نام آن را prometheus.rules.yml می‌گذاریم و محتویات آن نیز به صورت زیر می‌نویسیم:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>groups:
+  - name: nginx1
+    rules:
+        - alert: Active Connection
+          expr: nginx_server_connections{instance="xxx.xxx.xxx.xxx:port", status="active"} &gt; 1000
+          for: 5m
+          labels:
+            severity: 2
+         annotations:
+         summary: "Value: {{ $value }}, Limit: 100"
+         description: "This is a decscription."
+</code></pre>
+</div>
+
+<p>برای توضیح کد بالا می‌توان گفت اگر کانکشن های active سرور مشخص شده برای ۵ دقیقه بیشتر از ۱۰۰۰ عدد بود برای ما alert ارسال شود.</p>
+
+<p>به همین صورت می‌توانید برای مقادیر مورد نظر خود rule نوشته و از alertmanager استفاده نمایید.</p>
+
+<p>قسمت چهارم از سری آموزش کانفیگ سیستم مانیتورینگ به پایان رسید.</p>
+
+  </div>
+
+  <div class="date">
+    نوشته شده در شنبه 10 آذر 1397
+  </div>
+  <div class="paginate">
+    <div class="row">
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/monitoring-system-nginx/" title="آموزش کانفیگ سیستم مانیتورینگ - Nginx">
+          <div class=" post-pg-btn post-previous">
+            <i class="fa fa-arrow-right pull-right" aria-hidden="true"></i> آموزش کانفیگ سیستم مانیتورینگ - Nginx
+          </div>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/install-letsencrypt-in-zimbra/" title="آموزش استفاده از گواهی LetsEncrypt SSL در ایمیل سرور Zimbra">
+          <div class=" post-pg-btn post-next">
+              <i class="fa fa-arrow-left pull-left" aria-hidden="true"></i> آموزش استفاده از گواهی LetsEncrypt SSL در ایمیل سرور Zimbra
+          </div>
+        </a>
+      
+    </div>
+  </div>
+  </div>
+  <br />
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'https-rasooll-com';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+      </div>
+    </div>
+  </div>
+
+
+  <footer class="footer">
+    <div class="social-icon">
+    <a href="mailto:safari@rasooll.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+
+
+    <a href="https://github.com/rasooll"><i class="fa fa-github" aria-hidden="true"></i></a>
+
+
+
+    <a href="https://www.linkedin.com/in/rasoolsf"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+
+
+    <a href="https://www.twitter.com/rasooll_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+
+    <a href="/feed.xml"><i class="fa fa-rss" aria-hidden="true"></i></a></div>
+    <div class="footer-text">
+      <i class="fa fa-heart heart-color"></i>
+    </div>
+  </footer>
+
+
+
+  
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+    crossorigin="anonymous"></script>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try { clicky.init(101072468); } catch (e) { }</script>
+  <noscript>
+    <p>
+      <img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101072468ns.gif" />
+    </p>
+  </noscript>
+</body>
+
+</html>

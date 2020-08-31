@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+
+<head>
+  <title>آموزش نصب وردپرس توسط داکر – رسول صفری – وبلاگی برای انتشار حرف هایم!</title>
+
+      <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+     
+    
+    <meta name="description" content="
+شاید شما هم نیاز داشته باشید تا یک وردپرس در کوتاه ترین زمان بدون نصب و تنظیمات Lamp داشته باشید ، در این زمان است که داکر به کمک شما میاد.
+شما توسط داکر می‌توانید مجموعه‌ای از برنامه‌ها را در کنار یکدیگر داشته باشید بدون این که تنظیمات این برنامه ها تداخلی با هم داشته ب..." />
+    <meta property="og:description" content="
+شاید شما هم نیاز داشته باشید تا یک وردپرس در کوتاه ترین زمان بدون نصب و تنظیمات Lamp داشته باشید ، در این زمان است که داکر به کمک شما میاد.
+شما توسط داکر می‌توانید مجموعه‌ای از برنامه‌ها را در کنار یکدیگر داشته باشید بدون این که تنظیمات این برنامه ها تداخلی با هم داشته ب..." />
+    <meta name="twitter:description" content="
+شاید شما هم نیاز داشته باشید تا یک وردپرس در کوتاه ترین زمان بدون نصب و تنظیمات Lamp داشته باشید ، در این زمان است که داکر به کمک شما میاد.
+شما توسط داکر می‌توانید مجموعه‌ای از برنامه‌ها را در کنار یکدیگر داشته باشید بدون این که تنظیمات این برنامه ها تداخلی با هم داشته ب..." />
+    
+    <meta property="author" content="رسول صفری" />
+    
+    <meta name="keywords" content="docker,wordpress,container,wp,dockerhub,داکر,وردپرس,داکرهاب,کانتینر," />
+    
+    
+    <meta property="og:title" content="آموزش نصب وردپرس توسط داکر" />
+    <meta name="twitter:title" content="آموزش نصب وردپرس توسط داکر" />
+    
+    
+    <meta property="og:image" content="https://rasooll.com/images/post/docker-wp.png" />
+    <meta name="twitter:image" content="https://rasooll.com/images/post/docker-wp.png" />
+    <meta name="twitter:image:alt" content="آموزش نصب وردپرس توسط داکر">
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:site" content="@rasooll_">
+    <meta name="twitter:creator" content="@rasooll_">
+    <meta property="og:url" content="https://rasooll.com/how-to-install-wordpress-via-docker/">
+    <meta property="og:locale" content="fa">
+    <link rel="author" href="https://rasooll.com">
+    <link rel="shortcut icon" href="https://rasooll.com/images/favicon.png" type="image/png" sizes="150x150"> 
+
+
+  <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="alternate" type="application/rss+xml" title="رسول صفری - وبلاگی برای انتشار حرف هایم!" href="/feed.xml" />
+  <link rel="manifest" href="/manifest.json">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <header class="siteinfo">
+          <a href="/">
+            <img src="https://secure.gravatar.com/avatar/789598edd4440e0a5e0d8e37f4ae5de7?s=140&d=mm&r=g" alt="آواتار رسول صفری" class="rounded avatar" />
+          </a>
+          <a href="/" class="sitename">
+            <h1>رسول صفری</h1>
+          </a>
+          <p class="sitedescription">وبلاگی برای انتشار حرف هایم!</p>
+        </header>
+      </div>
+      <div class="col-md-5">
+        <nav class="font-titr topbar">
+          <div class="vertical-middle">
+            <a href="/archive">آرشیو</a>
+            <a href="/about">درباره‌ی من</a>
+            <a href="/contact">تماس با من</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="hrbtm"> </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <article class="post">
+  <h1>آموزش نصب وردپرس توسط داکر</h1>
+
+  <div class="content">
+    <p align="center"><img src="/images/post/docker-wp.png" alt="داکر و وردپرس" /></p>
+<p>شاید شما هم نیاز داشته باشید تا یک وردپرس در کوتاه ترین زمان بدون نصب و تنظیمات Lamp داشته باشید ، در این زمان است که داکر به کمک شما میاد.<br />
+شما توسط داکر می‌توانید مجموعه‌ای از برنامه‌ها را در کنار یکدیگر داشته باشید بدون این که تنظیمات این برنامه ها تداخلی با هم داشته باشند ، خوب دیگه بریم سراغ نصب وردپرس.</p>
+
+<p>فرض بر این داریم که داکر روی سیستم شما نصب است ، اما اگر نیست به این <a href="https://docker.com" target="_blank">پیوند</a> مراجعه کنید.</p>
+
+<p>برای شروع باید ‌دیتابیس ماریا را نصب کنیم برای اینکار از دستور زیر استفاده می‌کنیم.</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>docker pull mariadb
+</code></pre>
+</div>
+<p>پس از نصب دیتابیس باید خود وردپرس را نصب کنیم.</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>docker pull wordpress
+</code></pre>
+</div>
+<ul>
+  <li>توجه داشته باشید دستورات داکر باید با دسترسی <code class="highlighter-rouge">sudo</code> اجرا شوند.</li>
+</ul>
+
+<p>حال ما هم دیتابیس در اختیار داریم و هم وردپرس ، اکنون به دو عدد پوشه نیاز داریم تا فایل های وردپرس و دیتابیس هایمان را در آنها ذخیره کنیم. فرض می‌کنیم آدرس پوشه‌های ما به صورت زیر است:</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>/home/rasool/www  <span class="c"># برای فایل های وردپرس </span>
+/home/rasool/mysql <span class="c"># برای ذخیره دیتابیس </span>
+</code></pre>
+</div>
+<p>ابتدا باید سرویس mysql را اجرا کنیم توسط دستور زیر:</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>docker run -e <span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span>rootpassword -e <span class="nv">MYSQL_USER</span><span class="o">=</span>dbuser -e <span class="nv">MYSQL_PASSWORD</span><span class="o">=</span>dbpassword -e <span class="nv">MYSQL_DATABASE</span><span class="o">=</span>dbname -v /home/rasool/mysql:/var/lib/mysql --name some-mariadb-name -d mariadb
+</code></pre>
+</div>
+<p>در دستور فوق برای متغییرهای زیر مقدار مورد نظر را می‌کنیم:</p>
+<ul>
+  <li>MYSQL_ROOT_PASSWORD : رمز عبور روت برای دیتابیس</li>
+  <li>MYSQL_USER : نام کاربری برای دیتابیس</li>
+  <li>MYSQL_PASSWORD :  رمز عبور برای نام کاربری ساخته شده</li>
+  <li>MYSQL_DATABASE : نام مورد نظر برای دیتابیس</li>
+</ul>
+
+<p>حال باید وردپرس را اجرا کنیم :</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>docker run -e <span class="nv">WORDPRESS_DB_USER</span><span class="o">=</span>dbuser -e <span class="nv">WORDPRESS_DB_PASSWORD</span><span class="o">=</span>dbpassword -e <span class="nv">WORDPRESS_DB_NAME</span><span class="o">=</span>dbname -p 8081:80 -v /home/rasool/www:/var/www/html --link some-mariadb-name:mysql --name wp-container -d wordpress
+</code></pre>
+</div>
+<p>با توجه به دیتابیسی که در مرحله قبل ساخته‌ایم برای دستور فوق هم اطلاعات دیتابیسمان را وارد می‌کنیم:</p>
+<ul>
+  <li>WORDPRESS_DB_USER : نام کاربری برای دیتابیس</li>
+  <li>WORDPRESS_DB_PASSWORD : رمز عبور برای نام کاربری ساخته شده</li>
+  <li>WORDPRESS_DB_NAME : نام دیتابیس ساخته شده</li>
+</ul>
+
+<p>حال وردپرس ما اجرا شده و از طریق آدرس زیر می‌توانیم به آن دسترسی داشته باشیم :</p>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>http://localhost:8081
+</code></pre>
+</div>
+<p>امیدوارم مفید بوده باشه ، خوش باشید.<br /></p>
+
+  </div>
+
+  <div class="date">
+    نوشته شده در چهارشنبه 04 بهمن 1396
+  </div>
+  <div class="paginate">
+    <div class="row">
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/how-to-create-telegram-robot-via-python/" title="ساخت ربات تلگرام ساده با پایتون ، از آماده سازی تا اجرا">
+          <div class=" post-pg-btn post-previous">
+            <i class="fa fa-arrow-right pull-right" aria-hidden="true"></i> ساخت ربات تلگرام ساده با پایتون ، از آماده سازی تا اجرا
+          </div>
+        </a>
+      
+    </div>
+    <div class="col-sm-6">
+      
+        <a href="https://rasooll.com/how-to-use-docker-in-iran/" title="عبور از تحریم‌های داکر روی گنو/لینوکس">
+          <div class=" post-pg-btn post-next">
+              <i class="fa fa-arrow-left pull-left" aria-hidden="true"></i> عبور از تحریم‌های داکر روی گنو/لینوکس
+          </div>
+        </a>
+      
+    </div>
+  </div>
+  </div>
+  <br />
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'https-rasooll-com';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+      </div>
+    </div>
+  </div>
+
+
+  <footer class="footer">
+    <div class="social-icon">
+    <a href="mailto:safari@rasooll.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+
+
+    <a href="https://github.com/rasooll"><i class="fa fa-github" aria-hidden="true"></i></a>
+
+
+
+    <a href="https://www.linkedin.com/in/rasoolsf"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+
+
+    <a href="https://www.twitter.com/rasooll_"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+
+    <a href="/feed.xml"><i class="fa fa-rss" aria-hidden="true"></i></a></div>
+    <div class="footer-text">
+      <i class="fa fa-heart heart-color"></i>
+    </div>
+  </footer>
+
+
+
+  
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+    crossorigin="anonymous"></script>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">try { clicky.init(101072468); } catch (e) { }</script>
+  <noscript>
+    <p>
+      <img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101072468ns.gif" />
+    </p>
+  </noscript>
+</body>
+
+</html>
